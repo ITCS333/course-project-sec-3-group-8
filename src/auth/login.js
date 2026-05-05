@@ -1,72 +1,66 @@
-// --- Element Selections ---
-const loginForm = document.getElementById("login-form");
-const emailInput = document.getElementById("email");
-const passwordInput = document.getElementById("password");
-const messageContainer = document.getElementById("message-container");
-
-// --- Functions ---
+const loginForm = document.getElementById('login-form');
+const emailInput = document.getElementById('email');
+const passwordInput = document.getElementById('password');
+const messageContainer = document.getElementById('message-container');
 
 function displayMessage(message, type) {
-  messageContainer.textContent = message;
-  messageContainer.className = type;
+    messageContainer.textContent = message;
+    messageContainer.className = type;
 }
 
 function isValidEmail(email) {
-  const regex = /\S+@\S+\.\S+/;
-  return regex.test(email);
+    const emailRegex = /\S+@\S+\.\S+/;
+    return emailRegex.test(email);
 }
 
 function isValidPassword(password) {
-  return password.length >= 8;
+    return password.length >= 8;
 }
 
 async function handleLogin(event) {
-  event.preventDefault();
+    event.preventDefault();
 
-  const email = emailInput.value.trim();
-  const password = passwordInput.value.trim();
+    const email = emailInput.value.trim();
+    const password = passwordInput.value.trim();
 
-  if (!isValidEmail(email)) {
-    displayMessage("Invalid email format.", "error");
-    return;
-  }
-
-  if (!isValidPassword(password)) {
-    displayMessage("Password must be at least 8 characters.", "error");
-    return;
-  }
-
-  try {
-    const response = await fetch("login.php", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ email, password })
-    });
-
-    const data = await response.json();
-
-    if (data.status === "success") {
-      displayMessage("Login successful!", "success");
-
-      setTimeout(() => {
-        window.location.href = "../../index.html";
-      }, 1000);
-
-    } else {
-      displayMessage(data.message, "error");
+    if (!isValidEmail(email)) {
+        displayMessage("Invalid email format.", "error");
+        return;
     }
 
-  } catch (error) {
-    displayMessage("Server error", "error");
-  }
+    if (!isValidPassword(password)) {
+        displayMessage("Password must be at least 8 characters.", "error");
+        return;
+    }
+
+    try {
+        const response = await fetch('login.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, password })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            displayMessage("Login successful!", "success");
+            emailInput.value = '';
+            passwordInput.value = '';
+            window.location.href = '../../index.html';
+        } else {
+            displayMessage(result.message || "Invalid credentials.", "error");
+        }
+    } catch (error) {
+        displayMessage("An error occurred during login.", "error");
+    }
 }
 
 function setupLoginForm() {
-  if (loginForm) {
-    loginForm.addEventListener("submit", handleLogin);
-  }
+    if (loginForm) {
+        loginForm.addEventListener('submit', handleLogin);
+    }
 }
 
 setupLoginForm();
