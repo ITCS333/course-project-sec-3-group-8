@@ -2,11 +2,10 @@
 session_start();
 require_once("../common/db.php");
 
-
 $data = json_decode(file_get_contents("php://input"), true);
 
-$email = $data['email'];
-$password = $data['password'];
+$email = $data['email'] ?? '';
+$password = $data['password'] ?? '';
 
 $sql = "SELECT * FROM users WHERE email = ? AND password = ?";
 $stmt = $conn->prepare($sql);
