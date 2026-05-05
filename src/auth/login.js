@@ -1,13 +1,14 @@
-
+// --- Element Selections ---
 const loginForm = document.getElementById("login-form");
 const emailInput = document.getElementById("email");
 const passwordInput = document.getElementById("password");
 const messageContainer = document.getElementById("message-container");
 
+// --- Functions ---
 
 function displayMessage(message, type) {
   messageContainer.textContent = message;
-  messageContainer.className = type; // success or error
+  messageContainer.className = type;
 }
 
 function isValidEmail(email) {
@@ -19,7 +20,7 @@ function isValidPassword(password) {
   return password.length >= 8;
 }
 
-function handleLogin(event) {
+async function handleLogin(event) {
   event.preventDefault();
 
   const email = emailInput.value.trim();
@@ -35,10 +36,31 @@ function handleLogin(event) {
     return;
   }
 
-  displayMessage("Login successful!", "success");
+  try {
+    const response = await fetch("login.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ email, password })
+    });
 
-  emailInput.value = "";
-  passwordInput.value = "";
+    const data = await response.json();
+
+    if (data.status === "success") {
+      displayMessage("Login successful!", "success");
+
+      setTimeout(() => {
+        window.location.href = "../../index.html";
+      }, 1000);
+
+    } else {
+      displayMessage(data.message, "error");
+    }
+
+  } catch (error) {
+    displayMessage("Server error", "error");
+  }
 }
 
 function setupLoginForm() {
