@@ -1,30 +1,54 @@
 <?php
-header('Content-Type: application/json');
-require_once __DIR__ . '/../common/db.php';
 session_start();
+include '../../db.php';
 
-$data = json_decode(file_get_contents('php://input'), true);
-$email = $data['email'] ?? null;
-$password = $data['password'] ?? null;
+header("Content-Type: application/json");
 
-if (!$email || !$password) {
-    echo json_encode(['success' => false, 'message' => 'Email and password are required.']);
-    exit;
-}
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-try {
-    $pdo = getDBConnection();
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ?");
-    $stmt->execute([$email]);
-    $user = $stmt->fetch();
+    $email = $_POST['email'] ?? '';
+    $password = $_POST['password'] ?? '';
 
-    if ($user && $password === $user['password']) {
-        $_SESSION['user_id'] = $user['id'];
-        $_SESSION['is_admin'] = $user['is_admin'];
-        echo json_encode(['success' => true]);
-    } else {
-        echo json_encode(['success' => false, 'message' => 'Invalid email or password.']);
+    if (empty($email) || empty($password)) {
+        echo json_encode([
+            "success" => false,
+            "message" => "Email and password required"
+        ]);
+        exit;
     }
-} catch (PDOException $e) {
-    echo json_encode(['success' => false, 'message' => 'Database error.']);
+
+    $sql = "SELECT * FROM users WHERE email = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+
+    $result = $stmt->get_result();
+
+    if ($result->num_rows === 1) {
+        $user = $result->fetch_assoc();
+
+        if ($password === $user['password']) {
+
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['is_admin'] = $user['is_admin'];
+
+            echo json_encode([
+                "success" => true,
+                "message" => "Login successful",
+                "is_admin" => $user['is_admin']
+            ]);
+        } else {
+            echo json_encode([
+                "success" => false,
+                "message" => "Wrong password"
+            ]);
+        }
+
+    } else {
+        echo json_encode([
+            "success" => false,
+            "message" => "User not found"
+        ]);
+    }
 }
+?>
