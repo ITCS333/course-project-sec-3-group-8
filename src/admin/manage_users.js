@@ -1,26 +1,43 @@
-<?php
-header('Content-Type: application/json');
-include '../../config/db_connect.php'; 
+document.addEventListener('DOMContentLoaded', () => {
+    fetchUsers();
 
-$action = $_GET['action'] ?? '';
+    const userForm = document.getElementById('user-form');
+    if (userForm) {
+        userForm.addEventListener('submit', handleUserSubmit);
+    }
+});
 
-if ($action === 'list') {
-    $result = $conn->query("SELECT id, email, is_admin FROM users");
-    $users = $result->fetch_all(MYSQLI_ASSOC);
-    echo json_encode($users);
-} 
+async function fetchUsers() {
+    try {
+        const response = await fetch('manage_users.php?action=list');
+        const users = await response.json();
+        const tableBody = document.querySelector('#user-table tbody');
+        tableBody.innerHTML = '';
 
-elseif ($action === 'delete') {
-    $data = json_decode(file_get_contents('php://input'), true);
-    $id = $data['id'];
-    
-    $stmt = $conn->prepare("DELETE FROM users WHERE id = ?");
-    $stmt->bind_param("i", $id);
-    
-    if ($stmt->execute()) {
-        echo json_encode(["success" => true]);
-    } else {
-        echo json_encode(["success" => false]);
+        users.forEach(user => {
+            tableBody.innerHTML += `
+                <tr>
+                    <td>${user.id}</td>
+                    <td>${user.email}</td>
+                    <td>${user.is_admin ? 'Admin' : 'Student'}</td>
+                    <td>
+                        <button onclick="deleteUser(${user.id})">Delete</button>
+                    </td>
+                </tr>`;
+        });
+    } catch (error) {
+        console.error('Error fetching users:', error);
     }
 }
-?>
+
+async function deleteUser(id) {
+    if (confirm('Are you sure?')) {
+        const response = await fetch('manage_users.php?action=delete', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: id })
+        });
+        const result = await response.json();
+        if (result.success) fetchUsers();
+    }
+}
