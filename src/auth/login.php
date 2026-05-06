@@ -1,54 +1,30 @@
 <?php
-session_start();
-include '../../db.php';
+header('Content-Type: application/json');
+require_once '../../config/db_connect.php';
 
-header("Content-Type: application/json");
+$data = json_decode(file_get_contents('php://input'), true);
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if (isset($data['email']) && isset($data['password'])) {
+    $email = $data['email'];
+    $password = $data['password'];
 
-    $email = $_POST['email'] ?? '';
-    $password = $_POST['password'] ?? '';
-
-    if (empty($email) || empty($password)) {
-        echo json_encode([
-            "success" => false,
-            "message" => "Email and password required"
-        ]);
-        exit;
-    }
-
-    $sql = "SELECT * FROM users WHERE email = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s", $email);
+    $stmt = $conn->prepare("SELECT id, email, is_admin FROM users WHERE email = ? AND password = ?");
+    $stmt->bind_param("ss", $email, $password);
     $stmt->execute();
-
     $result = $stmt->get_result();
 
-    if ($result->num_rows === 1) {
-        $user = $result->fetch_assoc();
-
-        if ($password === $user['password']) {
-
-            $_SESSION['user_id'] = $user['id'];
-            $_SESSION['is_admin'] = $user['is_admin'];
-
-            echo json_encode([
-                "success" => true,
-                "message" => "Login successful",
-                "is_admin" => $user['is_admin']
-            ]);
-        } else {
-            echo json_encode([
-                "success" => false,
-                "message" => "Wrong password"
-            ]);
-        }
-
-    } else {
+    if ($user = $result->fetch_assoc()) {
         echo json_encode([
-            "success" => false,
-            "message" => "User not found"
+            "success" => true,
+            "user" => [
+                "id" => $user['id'],
+                "email" => $user['email'],
+                "is_admin" => (bool)$user['is_admin']
+            ]
         ]);
+    } else {
+        echo json_encode(["success" => false]);
     }
+} else {
+    echo json_encode(["success" => false]);
 }
-?>
