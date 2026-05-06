@@ -53,8 +53,8 @@ async function handleLogin(event) {
       displayMessage("Login successful!", "success");
 
       setTimeout(() => {
-        window.location.href = "../../index.html";
-      }, 1000);
+  window.location.href = "/index.html";
+}, 1000);
 
     } else {
       displayMessage(data.message, "error");
