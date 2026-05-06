@@ -21,6 +21,7 @@ function createUserRow(user) {
 }
 
 function renderTable(userArray) {
+    if (!userTableBody) return;
     userTableBody.innerHTML = '';
     userArray.forEach(user => {
         userTableBody.appendChild(createUserRow(user));
@@ -95,17 +96,15 @@ async function handleAddUser(event) {
 }
 
 async function handleTableClick(event) {
-    const id = event.target.getAttribute('data-id');
     if (event.target.classList.contains('delete-btn')) {
-        if (!confirm("Are you sure you want to delete this user?")) return;
+        const id = event.target.getAttribute('data-id');
+        if (!confirm("Are you sure?")) return;
         try {
             const response = await fetch(`../api/index.php?id=${id}`, { method: 'DELETE' });
             const result = await response.json();
             if (result.success) {
                 users = users.filter(u => u.id != id);
                 renderTable(users);
-            } else {
-                alert(result.message);
             }
         } catch (error) {
             console.error(error);
@@ -115,10 +114,6 @@ async function handleTableClick(event) {
 
 function handleSearch(event) {
     const searchTerm = event.target.value.toLowerCase();
-    if (!searchTerm) {
-        renderTable(users);
-        return;
-    }
     const filtered = users.filter(user => 
         user.name.toLowerCase().includes(searchTerm) || 
         user.email.toLowerCase().includes(searchTerm)
@@ -136,13 +131,9 @@ function handleSort(event) {
     event.currentTarget.setAttribute('data-sort-dir', dir);
 
     users.sort((a, b) => {
-        let valA = a[prop];
-        let valB = b[prop];
-        if (prop === 'is_admin') {
-            return dir === 'asc' ? valA - valB : valB - valA;
-        } else {
-            return dir === 'asc' ? valA.localeCompare(valB) : valB.localeCompare(valA);
-        }
+        let valA = String(a[prop]);
+        let valB = String(b[prop]);
+        return dir === 'asc' ? valA.localeCompare(valB) : valB.localeCompare(valA);
     });
     renderTable(users);
 }
@@ -150,19 +141,17 @@ function handleSort(event) {
 async function loadUsersAndInitialize() {
     try {
         const response = await fetch('../api/index.php');
-        if (!response.ok) throw new Error("Failed to fetch users");
         const result = await response.json();
         users = result.data || [];
         renderTable(users);
 
-        passwordForm.onsubmit = handleChangePassword;
-        addUserForm.onsubmit = handleAddUser;
-        userTableBody.onclick = handleTableClick;
-        searchInput.oninput = handleSearch;
+        if (passwordForm) passwordForm.onsubmit = handleChangePassword;
+        if (addUserForm) addUserForm.onsubmit = handleAddUser;
+        if (userTableBody) userTableBody.onclick = handleTableClick;
+        if (searchInput) searchInput.oninput = handleSearch;
         tableHeaders.forEach(th => th.onclick = handleSort);
     } catch (error) {
-        console.error(error);
-        alert("Error loading users.");
+        console.error("Initialization failed", error);
     }
 }
 
