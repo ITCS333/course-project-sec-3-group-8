@@ -3,6 +3,7 @@ session_start();
 session_destroy();
 
 echo json_encode([
-    "status" => "success"
+    "success" => true,
+    "message" => "Logged out successfully"
 ]);
 ?>
