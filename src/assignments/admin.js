@@ -58,18 +58,21 @@ const tr = document.createElement("tr");
 const titleTd = document.createElement("td");
 const descriptionTd = document.createElement("td");
 const actionsTd = document.createElement("td");
+const dueDateTd = document.createElement("td");
+
 
 titleTd.textContent = assignment.title;
 dueDateTd.textContent = assignment.due_date;
 descriptionTd.textContent = assignment.description;
 
 const editBtn = document.createElement("button");
+editBtn.className = "edit-btn";
 editBtn.textContent = "Edit";
 editBtn.dataset.id = assignment.id;
 
 const deleteBtn = document.createElement("button");
 deleteBtn.textContent = "Delete";
-deleteBtn.ClassName = "delete-btn"
+deleteBtn.ClassName = "delete-btn";
 deleteBtn.dataset.id = assignment.id;
 
 actionsTd.appendChild(editBtn);
@@ -137,9 +140,9 @@ document.getElementById("assignment-description").value;
 const files = 
 document
 .getElementById("assignment-files")
-.value2
+.value
 .split("\n")
-Filter(file => file.trim() !== "");
+.filter(file => file.trim() !== "");
 
 const submitBtn =
 document.getElementById("add-assignment");
@@ -151,7 +154,7 @@ if(editId) {
   return;
 }
 try {
-  const response = await fetch("./ait/indexedDB.php", {
+  const response = await fetch("./api/index.php", {
     method:"POST", headers:{"Content-Type": "application/json"
     },
     body: JSON.stringify ({
@@ -210,13 +213,13 @@ try {
           id: Number(id),...fields
         };
       }
-      return assignments;
+      return assignment;
     });
     renderTable();
     assignmentForm.reset();
     const submitBtn = 
     document.getElementById("add-assignment");
-    submitBtn.textContent ="Add Assignments";
+    submitBtn.textContent ="Add Assignment";
     delete submitBtn.dataset.editId;
   }
 }
@@ -253,11 +256,11 @@ if (event.target.classList.contains("delete-btn"))
   const id = parseInt(event.target.dataset.id);
   try{
     const response = await fetch (
-      './api/index.php?id=${id}',{method = "Delete"}
+      `./api/index.php?id=${id}`,{method:"DELETE"}
     );
     const result = await response.json();
     if (result.success) {
-      assignments = assignments.filter ( assignments => assignment.id !==id);
+      assignments = assignments.filter(assignment => assignment.id !== id);
       renderTable();
     }
   }
@@ -279,11 +282,11 @@ if (event.target.classList.contains("edit-btn")) {
   document.getElementById("assignment-description").value=
     assignment.description;
       document.getElementById("assignment-files").value=
-    assignment.files.join("/n");
+    assignment.files.join("\n");
 
     const submitBtn =
     document.getElementById("add-assignment");
-    submitBtn.textContent = "update assignment";
+    submitBtn.textContent = "Update Assignment";
     submitBtn.dataset.editId = assignment.id;
 }
 }
@@ -301,25 +304,35 @@ if (event.target.classList.contains("edit-btn")) {
  * 5. Attach a 'click' event listener to the assignments table body
  *    (calls handleTableClick — event delegation for edit and delete).
  */
-async function loadAndInitialize() {
-async function loadAndInitialize(){
-  try {
-    const response = await fetch("./api/index.php");
-    const result = await response.json();
-    if(result.success) {
-      assignments = result.data;
+async function loadAndInitialize() 
+    {
+
+    try {
+
+        const response = await fetch("./api/index.php");
+
+        const result = await response.json();
+
+        if(result.success) {
+            assignments = result.data;
+        }
+
+        renderTable();
+
+        assignmentForm.addEventListener(
+            "submit",
+            handleAddAssignment
+        );
+
+        assignmentsTbody.addEventListener(
+            "click",
+            handleTableClick
+        );
+
+    } catch(error) {
+
+        console.error("Error loading assignments:", error);
+
     }
-    renderTable();
-    assignmentForm.addEventListener(
-      "submit",handleAddAssignment
-    );
-    assignmentsTbody.addEventListener("click",handleTableClick);
-
-  } catch(arror) {
-    console.error("Error loading assignments:", error);
-  }
 }
-}
-
-// --- Initial Page Load ---
 loadAndInitialize();
