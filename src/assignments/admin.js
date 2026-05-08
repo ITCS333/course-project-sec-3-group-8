@@ -72,7 +72,7 @@ editBtn.dataset.id = assignment.id;
 
 const deleteBtn = document.createElement("button");
 deleteBtn.textContent = "Delete";
-deleteBtn.ClassName = "delete-btn";
+deleteBtn.className = "delete-btn";
 deleteBtn.dataset.id = assignment.id;
 
 actionsTd.appendChild(editBtn);
@@ -282,7 +282,7 @@ if (event.target.classList.contains("edit-btn")) {
   document.getElementById("assignment-description").value=
     assignment.description;
       document.getElementById("assignment-files").value=
-    assignment.files.join("\n");
+      (assignment.files || []).join("\n");
 
     const submitBtn =
     document.getElementById("add-assignment");
