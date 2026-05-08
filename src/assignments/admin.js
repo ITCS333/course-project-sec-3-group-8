@@ -4,7 +4,6 @@
   Instructions:
   1. This file is already linked to `admin.html` via:
          <script src="admin.js" defer></script>
-
   2. In `admin.html`:
      - The form has id="assignment-form".
      - The submit button has id="add-assignment".
@@ -33,9 +32,9 @@ let assignments = [];
 
 // --- Element Selections ---
 // TODO: Select the assignment form by id 'assignment-form'.
-
+const assignmentForm = document.getElementById("assignment-form");
 // TODO: Select the assignments table body by id 'assignments-tbody'.
-
+const assignmentsTbody = document.getElementById("assignments-tbody");
 // --- Functions ---
 
 /**
@@ -55,7 +54,33 @@ let assignments = [];
  *      The data-id holds the integer primary key from the assignments table.
  */
 function createAssignmentRow(assignment) {
-  // ... your implementation here ...
+const tr = document.createElement("tr");
+const titleTd = document.createElement("td");
+const descriptionTd = document.createElement("td");
+const actionsTd = document.createElement("td");
+
+titleTd.textContent = assignment.title;
+dueDateTd.textContent = assignment.due_date;
+descriptionTd.textContent = assignment.description;
+
+const editBtn = document.createElement("button");
+editBtn.textContent = "Edit";
+editBtn.dataset.id = assignment.id;
+
+const deleteBtn = document.createElement("button");
+deleteBtn.textContent = "Delete";
+deleteBtn.ClassName = "delete-btn"
+deleteBtn.dataset.id = assignment.id;
+
+actionsTd.appendChild(editBtn);
+actionsTd.appendChild(deleteBtn);
+
+tr.appendChild(titleTd);
+tr.appendChild(dueDateTd);
+tr.appendChild(descriptionTd);
+tr.appendChild(actionsTd);
+
+return tr;
 }
 
 /**
@@ -68,7 +93,12 @@ function createAssignmentRow(assignment) {
  *    append the <tr> to the table body.
  */
 function renderTable() {
-  // ... your implementation here ...
+assignmentsTbody.innerHTML ="";
+for (let assignment of assignments)
+{
+  const row = createAssignmentRow(assignment);
+  assignmentsTbody.appendChild(row);
+}
 }
 
 /**
@@ -96,8 +126,56 @@ function renderTable() {
  *        - Reset the form.
  */
 async function handleAddAssignment(event) {
-  // ... your implementation here ...
+event.preventDefault();
+const title =
+document.getElementById("assignment-title").value;
+const due_date =
+document.getElementById("assignment-due-date").value;
+const description = 
+document.getElementById("assignment-description").value;
+
+const files = 
+document
+.getElementById("assignment-files")
+.value2
+.split("\n")
+Filter(file => file.trim() !== "");
+
+const submitBtn =
+document.getElementById("add-assignment");
+
+const editId = submitBtn.dataset.editId;
+
+if(editId) {
+  await handleUpdateAssignment(editId, { title,due_date,description,files});
+  return;
 }
+try {
+  const response = await fetch("./ait/indexedDB.php", {
+    method:"POST", headers:{"Content-Type": "application/json"
+    },
+    body: JSON.stringify ({
+      title,due_date,description,files
+    })
+  });
+  const result = await response.json();
+if (result.success) {
+  assignments.push({
+    id: result.id,
+    title,
+    due_date,
+    description,
+    files
+});
+renderTable();
+assignmentForm.reset();
+  }
+}
+catch (error) {
+  console.error("Error adding assignment:", error);
+}
+}
+
 
 /**
  * TODO: Implement handleUpdateAssignment (async).
@@ -117,8 +195,34 @@ async function handleAddAssignment(event) {
  *      its data-edit-id attribute.
  */
 async function handleUpdateAssignment(id, fields) {
-  // ... your implementation here ...
+try {
+  const response = await fetch("./api/index.php",{
+    method: "PUT", headers: {
+      "Content-Type":"application/json"
+    },
+    body: JSON.stringify({id,...fields})
+  });
+  const result = await response.json();
+  if (result.success) {
+    assignments = assignments.map(assignment => {
+      if (assignment.id == id) {
+        return {
+          id: Number(id),...fields
+        };
+      }
+      return assignments;
+    });
+    renderTable();
+    assignmentForm.reset();
+    const submitBtn = 
+    document.getElementById("add-assignment");
+    submitBtn.textContent ="Add Assignments";
+    delete submitBtn.dataset.editId;
+  }
 }
+catch (error) {
+  console.error("Error updating assignment:", error);
+}}
 
 /**
  * TODO: Implement handleTableClick (async).
@@ -144,7 +248,44 @@ async function handleUpdateAssignment(id, fields) {
  *       assignment's id.
  */
 async function handleTableClick(event) {
-  // ... your implementation here ...
+if (event.target.classList.contains("delete-btn"))
+{
+  const id = parseInt(event.target.dataset.id);
+  try{
+    const response = await fetch (
+      './api/index.php?id=${id}',{method = "Delete"}
+    );
+    const result = await response.json();
+    if (result.success) {
+      assignments = assignments.filter ( assignments => assignment.id !==id);
+      renderTable();
+    }
+  }
+  catch(error) {
+    console.error("Error deleting assignment:", error);
+
+  }
+}
+if (event.target.classList.contains("edit-btn")) {
+  const id = parseInt(event.target.dataset.id);
+  const assignment = assignments.find(
+    assignment => assignment.id === id
+  );
+  if (!assignment) return;
+  document.getElementById("assignment-title").value=
+    assignment.title;
+     document.getElementById("assignment-due-date").value=
+    assignment.due_date;
+  document.getElementById("assignment-description").value=
+    assignment.description;
+      document.getElementById("assignment-files").value=
+    assignment.files.join("/n");
+
+    const submitBtn =
+    document.getElementById("add-assignment");
+    submitBtn.textContent = "update assignment";
+    submitBtn.dataset.editId = assignment.id;
+}
 }
 
 /**
@@ -161,7 +302,23 @@ async function handleTableClick(event) {
  *    (calls handleTableClick — event delegation for edit and delete).
  */
 async function loadAndInitialize() {
-  // ... your implementation here ...
+async function loadAndInitialize(){
+  try {
+    const response = await fetch("./api/index.php");
+    const result = await response.json();
+    if(result.success) {
+      assignments = result.data;
+    }
+    renderTable();
+    assignmentForm.addEventListener(
+      "submit",handleAddAssignment
+    );
+    assignmentsTbody.addEventListener("click",handleTableClick);
+
+  } catch(arror) {
+    console.error("Error loading assignments:", error);
+  }
+}
 }
 
 // --- Initial Page Load ---
