@@ -93,7 +93,7 @@ function renderAssignmentDetails(assignment) {
 
   assignmentFilesList.innerHTML = "";
 
-  assignment.files.forEach((url) => {
+  (assignment.files || []).forEach((url) => {
     const li = document.createElement("li");
 
     const link = document.createElement("a");
