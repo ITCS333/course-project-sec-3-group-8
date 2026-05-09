@@ -25,7 +25,9 @@
 // --- Element Selections ---
 // TODO: Select the section for the assignment list using its
 //       id 'assignment-list-section'.
-
+const assignmentListSection = document.getElementById(
+  "assignment-list-section"
+);
 // --- Functions ---
 
 /**
@@ -54,7 +56,27 @@
  * the assignments table) so that details.js can read the id from the URL.
  */
 function createAssignmentArticle(assignment) {
-  // ... your implementation here ...
+  const article = document.createElement("article");
+
+  const title = document.createElement("h2");
+  title.textContent = assignment.title;
+
+  const dueDate = document.createElement("p");
+  dueDate.textContent =` Due: ${assignment.due_date}`;
+
+  const description = document.createElement("p");
+  description.textContent = assignment.description;
+
+  const detailsLink = document.createElement("a");
+  detailsLink.href =` details.html?id=${assignment.id}`;
+  detailsLink.textContent = "View Details & Discussion";
+
+  article.appendChild(title);
+  article.appendChild(dueDate);
+  article.appendChild(description);
+  article.appendChild(detailsLink);
+
+  return article;
 }
 
 /**
@@ -71,7 +93,26 @@ function createAssignmentArticle(assignment) {
  *    - Append the returned <article> to the list section.
  */
 async function loadAssignments() {
-  // ... your implementation here ...
+  try {
+    const response = await fetch("./api/index.php");
+
+    const result = await response.json();
+
+    assignmentListSection.innerHTML = "";
+
+    if (result.success === true) {
+      result.data.forEach((assignment) => {
+        const article = createAssignmentArticle(assignment);
+
+        assignmentListSection.appendChild(article);
+      });
+    }
+  } catch (error) {
+    console.error("Error loading assignments:", error);
+
+    assignmentListSection.innerHTML =
+      "<p>Failed to load assignments.</p>";
+  }
 }
 
 // --- Initial Page Load ---
