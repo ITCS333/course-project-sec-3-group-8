@@ -68,7 +68,7 @@ const tr = document.createElement("tr");
  */
 function renderTable() {
   // ... your implementation here ...
-  tableBody.innerHTML = ;
+  tableBody.innerHTML = "";
   resources.forEach(resource => {
     
     const row = createResourceRow(resource);
