@@ -815,11 +815,13 @@ $missing = [];
     foreach ($requiredFields as $field) {
     if (empty($data[$field])) $missing[] = $field;
 
-        }
+        
     
     
    
 return ['valid'=>empty($missing),'missing'=>$missing];
+
+    }
 }
 
 
