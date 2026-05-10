@@ -73,7 +73,7 @@ function renderTable() {
     
     const row = createResourceRow(resource);
 
-    tableBody.appendChild(createResourceRow(resource));
+    tableBody.appendChild(row);
   });
 }
 
