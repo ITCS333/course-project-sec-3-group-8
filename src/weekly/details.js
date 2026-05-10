@@ -94,12 +94,14 @@ function renderWeekDetails(week) {
 
    weekLinksList.innerHTML="";
 
-   week.links.forEach(function(url){
+   const links= week.links || [];
+
+   links.forEach(function(url){
     const li =document.createElement("li");
     const a =document.createElement("a");
 
-    a.href=url;
-    a.textContent=url;
+    a.href= url;
+    a.textContent= url;
 
     li.appendChild(a);
     weekLinksList.appendChild(li);
