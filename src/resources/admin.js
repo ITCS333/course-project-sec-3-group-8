@@ -68,11 +68,13 @@ const tr = document.createElement("tr");
  */
 function renderTable() {
   // ... your implementation here ...
-  tableBody.innerHTML = "";
-  if (!resources || resources.length === 0) return;
-  resources.forEach(resource => {
+
+tableBody.innerHTML = "";
+
+  data.forEach(resource => {
     tableBody.appendChild(createResourceRow(resource));
   });
+
 }
 
 
