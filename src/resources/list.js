@@ -23,11 +23,11 @@
  * The "View Resource & Discussion" link's `href` MUST be set to
  * `details.html?id=${id}` so the detail page knows which resource to load.
  */
+
 function createResourceArticle(resource) {
   // ... your implementation here ...
   
 const article = document.createElement("article");
-const section = document.getElementById("resource-list-section");
   article.innerHTML = `
     <h3>${resource.title}</h3>
     <p>${resource.description}</p>
@@ -54,18 +54,20 @@ async function loadResources() {
   // ... your implementation here ...
   
  // fetch data
-  const res = await fetch("./api/index.php");
-  const data = await res.json();
+  
+ const section = document.getElementById("resource-list-section");
 
-  // clear section
-  section.innerHTML = "";
+    const res = await fetch("./api/index.php");
+    const data = await res.json();
 
-  // loop + render
-  if (data.success) {
-    data.data.forEach(resource => {
-      section.appendChild(createResourceArticle(resource));
-    });
-  }
+    // clear section
+    section.innerHTML = "";
+
+    if (data.success) {
+        data.data.forEach(resource => {
+            section.appendChild(createResourceArticle(resource));
+        });
+    }
 
 }
 
