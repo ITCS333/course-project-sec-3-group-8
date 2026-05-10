@@ -187,7 +187,7 @@ async function handleAddComment(event) {
     return;
   }
 
-  const Response= await fetch("./api/index.php?action=comment",{
+  const response= await fetch("./api/index.php?action=comment",{
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -199,7 +199,7 @@ async function handleAddComment(event) {
     })
   });
 
-  const result = await Response.json();
+  const result = await response.json();
 
   if(result.success=== true){
     currentComments.push(result.data);
