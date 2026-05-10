@@ -129,7 +129,7 @@ function createCommentArticle(comment) {
   p.textContent= comment.text;
 
   const footer= document.createElement("footer");
-  footer.textContent= "Posted by:"+comment.auther;
+  footer.textContent= "Posted by: " + comment.auther;
 
   article.appendChild(p);
   article.appendChild(footer);
@@ -183,7 +183,7 @@ async function handleAddComment(event) {
 
   const commentText = newCommentInput.value.trim();
 
-  if (commentText= ""){
+  if (commentText === ""){
     return;
   }
 
