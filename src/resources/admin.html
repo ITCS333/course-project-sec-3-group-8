@@ -9,7 +9,6 @@
 <html lang="en">
 <head>
     
-    <script src="admin.js" defer></script>
 
     <!-- TODO: Add the 'meta' tag for character encoding (UTF-8). -->
     
@@ -49,14 +48,14 @@
         
 
         <!-- TODO: Create a 'section' for the form. -->
-         <section class="mb-5"></section>
+         <section class="mb-5">
             <!-- TODO: Add a sub-heading ('h2') "Add a New Resource". -->
 
             <h2>Add a New Resource</h2>
 
             <!-- TODO: Create a 'form' with id="resource-form". Action can be '#'.
                  This id is required by admin.js. --> 
-                 <form id="resource-form"></form>
+                 <form id="resource-form">
                 <!-- TODO: Use a 'fieldset' to group the form controls. -->
                  
                 <fieldset class="border p-3">
@@ -110,7 +109,7 @@
             <h2>Existing Resources</h2>
 
             <!-- TODO: Create a 'table' with id="resources-table". -->
-             <table id="resources-table" class="table table-bordered"></table>
+             <table id="resources-table" class="table table-bordered">
                 <!-- TODO: Create a 'thead' and a 'tr' inside it. -->
         
                     <!-- TODO: Add 'th' elements for "Title", "Descrip
@@ -137,24 +136,18 @@
                         <!-- TODO: Add a 'td' for the description. -->
                         <!-- TODO: Add a 'td' for the link. -->
 
-                    <tr>
-                        <td>Title</td>
-                        <td>Description</td>
-                        <td>Link</td>
-                        
+                
 
                         <!-- TODO: Add a 'td' containing the action buttons. -->
-                         <td>
+                         
                             <!-- TODO: Add an "Edit" button with class="edit-btn"
                                  and data-id set to the resource's id. -->
-                                 <button class="edit-btn" data-id="1">Edit</button>
                             <!-- TODO: Add a "Delete" button with class="delete-btn"
-                                 and data-id set to the resource's id. -->  <button class="delete-btn" data-id="1">Delete</button>
-                        <!-- End of actions 'td'. -->
-                        </td>
+                                 and data-id set to the resource's id. -->  
+                        
 
                     <!-- End of the row. -->
-                  </tr>
+                  
                 <!-- End of tbody. -->
                 </tbody>
 

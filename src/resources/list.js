@@ -27,7 +27,7 @@ function createResourceArticle(resource) {
   // ... your implementation here ...
   
 const article = document.createElement("article");
-
+const section = document.getElementById("resource-list-section");
   article.innerHTML = `
     <h3>${resource.title}</h3>
     <p>${resource.description}</p>
