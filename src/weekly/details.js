@@ -129,7 +129,7 @@ function createCommentArticle(comment) {
   p.textContent= comment.text;
 
   const footer= document.createElement("footer");
-  footer.textContent= "posted by:"+comment.auther;
+  footer.textContent= "Posted by:"+comment.auther;
 
   article.appendChild(p);
   article.appendChild(footer);
@@ -181,16 +181,16 @@ async function handleAddComment(event) {
   // ... your implementation here ...
   event.preventDefult();
 
-  const commentText = newCommentInput.ariaValueMax.trim();
+  const commentText = newCommentInput.value.trim();
 
   if (commentText= ""){
     return;
   }
 
   const Response= await fetch("./api/index.php?action=comment",{
-    method: "Post",
+    method: "POST",
     headers: {
-      "Content-type": "application/json"
+      "Content-Type": "application/json"
     },
     body: JSON.stringify({
       week_id:currentWeekId,
@@ -198,11 +198,13 @@ async function handleAddComment(event) {
       text: commentText
     })
   });
+
   const result = await Response.json();
-  if(result.success=== treue){
+
+  if(result.success=== true){
     currentComments.push(result.data);
     renderComments();
-    newCommentInput.value="";
+    newCommentInput.value= "";
   }
 }
 
