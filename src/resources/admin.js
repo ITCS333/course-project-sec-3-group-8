@@ -75,7 +75,7 @@ function renderTable() {
   });
 }
 
-}
+
 
 /**
  * TODO: Implement the handleAddResource function.
