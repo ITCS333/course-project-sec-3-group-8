@@ -196,6 +196,12 @@ async function handleAddComment(event) {
       text: commentText
     })
   });
+  const result = await Response.json();
+  if(result.success=== treue){
+    currentComments.push(result.data);
+    renderComments();
+    newCommentInput.value="";
+  }
 }
 
 /**
