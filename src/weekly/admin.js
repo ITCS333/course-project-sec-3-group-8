@@ -66,24 +66,24 @@ function createWeekRow(week) {
   const descriptionTd= document.createElement("td");
   descriptionTd.textContent= week.description;
 
-  const actionTd=document.getElementById("td");
+  const actionsTd=document.createElement("td");
 
   const editBtn = document.createElement("button");
   editBtn.textContent= "Edit";
   editBtn.className= "edit-btn";
-  editBtn.dataset= week.id;
+  editBtn.dataset.id= week.id;
   const deleteBtn = document.createElement("button");
   deleteBtn.textContent= "Delete";
   deleteBtn.className= "delete-btn";
-  deleteBtn.dataset= week.id;
+  deleteBtn.dataset.id= week.id;
 
-  actionTd.appendChild(editBtn);
-  actionTd.appendChild(deleteBtn);
+  actionsTd.appendChild(editBtn);
+  actionsTd.appendChild(deleteBtn);
 
   tr.appendChild(titleTd);
   tr.appendChild(startDateTd);
   tr.appendChild(descriptionTd);
-  tr.appendChild(actionTd);
+  tr.appendChild(actionsTd);
 
   return tr;
 }
