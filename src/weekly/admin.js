@@ -32,9 +32,9 @@ let weeks = [];
 
 // --- Element Selections ---
 // TODO: Select the week form by id 'week-form'.
-
+const weekForm= document.getElementById("week-form");
 // TODO: Select the weeks table body by id 'weeks-tbody'.
-
+const weekTbody= document.getElementById("weeks-tbody");
 // --- Functions ---
 
 /**
@@ -55,6 +55,37 @@ let weeks = [];
  */
 function createWeekRow(week) {
   // ... your implementation here ...
+  const tr= document.createElement("tr");
+
+  const titleTd= document.createElement("td");
+  titleTd.textContent = week.title;
+
+  const startDateTd= document.createElement("td");
+  startDateTd.textContent= week.start_date;
+
+  const descriptionTd= document.createElement("td");
+  descriptionTd.textContent= week.description;
+
+  const actionTd=document.getElementById("td");
+
+  const editBtn = document.createElement("button");
+  editBtn.textContent= "Edit";
+  editBtn.className= "edit-btn";
+  editBtn.dataset= week.id;
+  const deleteBtn = document.createElement("button");
+  deleteBtn.textContent= "Delete";
+  deleteBtn.className= "delete-btn";
+  deleteBtn.dataset= week.id;
+
+  actionTd.appendChild(editBtn);
+  actionTd.appendChild(deleteBtn);
+
+  tr.appendChild(titleTd);
+  tr.appendChild(startDateTd);
+  tr.appendChild(descriptionTd);
+  tr.appendChild(actionTd);
+
+  return tr;
 }
 
 /**
@@ -68,6 +99,12 @@ function createWeekRow(week) {
  */
 function renderTable() {
   // ... your implementation here ...
+  weekTbody.innerHTML="";
+
+  weeks.forEach(function(week){
+    const tr= createWeekRow(week);
+    weekTbody.appendChild(tr);
+  });
 }
 
 /**
@@ -94,6 +131,62 @@ function renderTable() {
  */
 async function handleAddWeek(event) {
   // ... your implementation here ...
+  event.preventDefault();
+
+  const weekTitle = document.getElementById("week-title");
+  const weekStartDate = document.getElementById("week-start-date");
+  const weekDescription = document.getElementById("week-description");
+  const weekLinks = document.getElementById("week-links");
+  const addWeek = document.getElementById("add-week");
+
+  const title= weekTitle.value.trim();
+  const start_date= weekStartDate.value.trim();
+  const description= weekDescription.value.trim(); 
+
+  const links = weekLinks.value
+  .split("\n")
+  .map(function(link){
+    return link.trim();
+  })
+  .filter(function(link){
+    return link !=="";
+  });
+
+  const editId = addWeek.dataset.editId;
+
+  if (editId){
+    await handleUpdateWeek(editId, title, start_date, description, links);
+    return;
+  }
+
+  const response = await fetch("./api/index.php",{
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body:JSON.stringify({
+      title: title,
+      start_date: start_date,
+      description: description,
+      links: links
+    })
+  });
+
+  const result = await response.json();
+
+  if (result.success === true){
+    weeks.push({
+      id: result.id,
+      title: title,
+      start_date: start_date,
+      description: description,
+      links: links
+    });
+
+    renderTable();
+    weekForm.reset();
+  }
+  
 }
 
 /**
@@ -115,6 +208,45 @@ async function handleAddWeek(event) {
  */
 async function handleUpdateWeek(id, fields) {
   // ... your implementation here ...
+  const response = await fetch("./api/index.php", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      id: id,
+      title: fields.title,
+      start_date: fields.start_date,
+      description: fields.description,
+      links: fields.links
+    })
+  });
+
+  const result = await response.json();
+
+  if (result.success === true) {
+    weeks = weeks.map(function(week) {
+      if (week.id == id) {
+        return {
+          id: Number(id),
+          title: fields.title,
+          start_date: fields.start_date,
+          description: fields.description,
+          links: fields.links
+        };
+      }
+
+      return week;
+    });
+
+    renderTable();
+    weekForm.reset();
+
+    const addWeek = document.getElementById("add-week");
+    addWeek.textContent = "Add Week";
+    delete addWeek.dataset.editId;
+  }
+
 }
 
 /**
@@ -139,6 +271,44 @@ async function handleUpdateWeek(id, fields) {
  */
 async function handleTableClick(event) {
   // ... your implementation here ...
+  if (event.target.classList.contains("delete-btn")) {
+    const id = event.target.dataset.id;
+
+    const response = await fetch("./api/index.php?id=" + id, {
+      method: "DELETE"
+    });
+
+    const result = await response.json();
+
+    if (result.success === true) {
+      weeks = weeks.filter(function(week) {
+        return week.id != id;
+      });
+
+      renderTable();
+    }
+  }
+
+  if (event.target.classList.contains("edit-btn")) {
+    const id = event.target.dataset.id;
+
+    const week = weeks.find(function(week) {
+      return week.id == id;
+    });
+
+    if (!week) {
+      return;
+    }
+
+    document.getElementById("week-title").value = week.title;
+    document.getElementById("week-start-date").value = week.start_date;
+    document.getElementById("week-description").value = week.description;
+    document.getElementById("week-links").value = (week.links || []).join("\n");
+
+    const addWeek = document.getElementById("add-week");
+    addWeek.textContent = "Update Week";
+    addWeek.dataset.editId = week.id;
+  }
 }
 
 /**
@@ -156,6 +326,16 @@ async function handleTableClick(event) {
  */
 async function loadAndInitialize() {
   // ... your implementation here ...
+  const response = await fetch("./api/index.php");
+  const result = await response.json();
+
+  if (result.success === true) {
+    weeks = result.data || [];
+    renderTable();
+  }
+
+  weekForm.addEventListener("submit", handleAddWeek);
+  weekTbody.addEventListener("click", handleTableClick);
 }
 
 // --- Initial Page Load ---
