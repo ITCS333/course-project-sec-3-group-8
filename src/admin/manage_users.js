@@ -227,7 +227,7 @@ function handleTableClick(event) {
     if (target.classList.contains("delete-btn")) {
         const id = target.getAttribute("data-id");
 
-        fetch(../api/index.php?id=${id}, {
+        fetch(`../api/index.php?id=${id}`, {
             method: "DELETE"
         })
         .then(res => {
