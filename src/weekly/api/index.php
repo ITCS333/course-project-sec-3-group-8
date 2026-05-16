@@ -59,7 +59,8 @@
 // ============================================================================
 // HEADERS AND INITIALIZATION
 // ============================================================================
-
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 // TODO: Set headers for JSON response and CORS.
 // Set Content-Type to application/json.
 // Allow cross-origin requests (CORS) if needed.
