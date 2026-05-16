@@ -461,7 +461,7 @@ function getCommentsByWeek(PDO $db, $weekId): void
     // TODO: Fetch all rows. Return sendResponse with the array
     //       (empty array is valid).
     $comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    sendResponse(['success' => true, 'data' => $comments])
+    sendResponse(['success' => true, 'data' => $comments]);
 }
 
 
