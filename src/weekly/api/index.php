@@ -59,8 +59,7 @@
 // ============================================================================
 // HEADERS AND INITIALIZATION
 // ============================================================================
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
+
 // TODO: Set headers for JSON response and CORS.
 // Set Content-Type to application/json.
 // Allow cross-origin requests (CORS) if needed.
@@ -492,7 +491,7 @@ function createComment(PDO $db, array $data): void
     }
     $weekId = $data['week_id'];
     $author = trim($data['author']);
-    $text = trim($data['text'])
+    $text = trim($data['text']);
 
     // TODO: Validate that week_id is numeric.
     if (!is_numeric($weekId)) {
