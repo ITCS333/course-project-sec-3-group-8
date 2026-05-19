@@ -95,7 +95,6 @@ require_once __DIR__ . '/config/Database.php';
 // $database = new Database();
 // $db = $database->getConnection();
 
-$db = getDBConnection();
 
 
 // TODO: Get the HTTP request method
@@ -649,6 +648,7 @@ if ($result && $stmt->rowCount() > 0) {
 // ============================================================================
 
 try {
+    $db = getDBConnection();
     // TODO: Route the request based on $method and $action
 
     if ($method === 'GET') {
