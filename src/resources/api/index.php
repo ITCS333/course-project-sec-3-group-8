@@ -109,8 +109,10 @@ $method = $_SERVER['REQUEST_METHOD'];
 // $rawData = file_get_contents('php://input');
 // $data = json_decode($rawData, true);
 
+
 $rawData = file_get_contents('php://input');
-$data = json_decode($rawData, true);
+$data = json_decode($rawData, true) ?? [];
+
 
 
 // TODO: Parse query parameters from $_GET
@@ -814,13 +816,15 @@ $missing = [];
 
     foreach ($requiredFields as $field) {
     if (empty($data[$field])){ 
-        $missing[] = $field;}
+        $missing[] = $field;
+        }
     }
         
     
     
    
-return ['valid'=>empty($missing),'missing'=>$missing];
+return ['valid'=>empty($missing),
+'missing'=>$missing];
 
     
 }
