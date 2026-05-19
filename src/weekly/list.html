@@ -10,27 +10,32 @@
 <head>
     <!-- TODO: Add meta tags for charset (UTF-8) and viewport
          (width=device-width, initial-scale=1.0). -->
-<meta charset="UTF-8">    
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- TODO: Add a <title>, e.g., "Weekly Course Breakdown". -->
-<title>Weekly Course Breakdown</title>
+    <title>Weekly Course Breakdown</title>
     <!-- TODO: Link to your CSS framework or stylesheet. -->
-<link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
     <!-- Required: link list.js with defer so the DOM is ready before the
          script runs. -->
     <script src="list.js" defer></script>
 </head>
-<body>
+<body class=list-page>
 
     <!-- TODO: Create a <header> containing an <h1> "Weekly Course Breakdown". -->
-<header>
-    <h1>Weekly Course Breakdown</h1>
+<header class="text-white py-4 shadow-sm"
+        style="background-color: #434343;">
+    <div class="container text-center">
+    <h1 class="fw-bold">Weekly Course Breakdown</h1>
+    <p class="mb-0-">View the weekly course plan and materials</p>
+    </div>
 </header>
     <!-- TODO: Create the <main> content area. -->
-<main>
+<main class="container my-5">
         <!-- TODO: Create a <section id="week-list-section"> to contain the
              list of week articles. The id is required by list.js. -->
-    <section id="week-list-section">
+    <section id="week-list-section" class="row g-4 justify-content-center">
             <!-- list.js will inject one <article> per week here.
                  Each article follows the structure below. -->
 

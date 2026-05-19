@@ -155,10 +155,15 @@ async function handleAddWeek(event) {
   const editId = addWeek.dataset.editId;
 
   if (editId){
-    await handleUpdateWeek(editId, title, start_date, description, links);
-    return;
+    await handleUpdateWeek(editId, {
+  title: title,
+  start_date: start_date,
+  description: description,
+  links: links
+  });
+  return;
   }
-
+  
   const response = await fetch("./api/index.php",{
     method: "POST",
     headers: {

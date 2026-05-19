@@ -98,10 +98,13 @@ function renderWeekDetails(week) {
 
    links.forEach(function(url){
     const li =document.createElement("li");
-    const a =document.createElement("a");
+    li.className = "list-group-item";
 
+    const a =document.createElement("a");
     a.href= url;
     a.textContent= url;
+    a.target = "_blank";
+    a.className = "resource-link";
 
     li.appendChild(a);
     weekLinksList.appendChild(li);
@@ -124,11 +127,14 @@ function renderWeekDetails(week) {
 function createCommentArticle(comment) {
   // ... your implementation here ...
   const article = document.createElement("article");
+  article.className = "comment-card p-3 mb-3";
 
   const p = document.createElement("p");
+  p.className = "mb-2";
   p.textContent = comment.text;
 
   const footer = document.createElement("footer");
+  footer.className = "text-muted small";
   footer.textContent = "Posted by: " + comment.author;
 
   article.appendChild(p);

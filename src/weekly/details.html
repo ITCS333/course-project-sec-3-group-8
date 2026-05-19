@@ -15,54 +15,61 @@
     <!-- TODO: Add a <title>, e.g., "Week Details". -->
      <title>Week Details</title>
     <!-- TODO: Link to your CSS framework or stylesheet. -->
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
      <link rel="stylesheet" href="style.css">
     <!-- Required: link details.js with defer. -->
     <script src="details.js" defer></script>
 </head>
-<body>
+<body class="details-page">
 
     <!-- TODO: Create a <header>.
          Inside it, add an <h1 id="week-title">.
          details.js will set its textContent to the week's title.
          Leave it empty for now. -->
-     <header>
-         <h1 id="week-title"></h1>
+     <header class="text-white py-4 shadow-sm page-header">
+       <div class="container text-center">
+         <h1 id="week-title" class="fw-bold"></h1>
+         <p class="mb-0">Week details, resources, and discussion</p>
+      </div>
      </header>
     <!-- TODO: Create the <main> content area. -->
-<main>
+<main class="container my-5">
         <!-- ============================================================
              Section 1: Weekly Information
              ============================================================ -->
         <!-- TODO: Use an <article> to display the main weekly information. -->
-     <article>
+     <article class="details-card card border-0 shadow-sm mb-4">
+         <div class="card-body p-4">
             <!-- TODO: Add a <p id="week-start-date">.
                  details.js will set it to "Starts on: YYYY-MM-DD"
                  using the start_date column from the weeks table. -->
-          <p id="week-start-date"></p>
+            <p id="week-start-date" class="text-muted small mb-3"></p>
             <!-- TODO: Add a <h2> "Description & Notes". -->
-          <h2>Description & Notes</h2>
+            <h2 class="h4 fw-bold mb-3">Description & Notes</h2>
             <!-- TODO: Add a <p id="week-description">.
                  details.js will set its textContent to the week's
                  description from the weeks table. -->
-          <p id="week-description"></p>
+            <p id="week-description" class="mb-4"></p>
             <!-- TODO: Add a <h2> "Exercises & Resources". -->
-          <h2>Exercises & Resources</h2>
+            <h2 class="h4 fw-bold mb-3">Exercises & Resources</h2>
             <!-- TODO: Add a <ul id="week-links-list">.
                  details.js will populate this list from the links
                  column in the weeks table. That column is a JSON-encoded
                  array of URL strings. Each URL becomes a <li><a> item.
                  Leave the list empty here. -->
-          <ul id="week-links-list"></ul>
+            <ul id="week-links-list" class="list-group list-group-flush"></ul>
         <!-- End of <article> -->
+        </div>
      </article>
 
         <!-- ============================================================
              Section 2: Discussion Forum
              ============================================================ -->
         <!-- TODO: Create a <section id="discussion-forum">. -->
-<section id="discussion-forum">
+<section id="discussion-forum" class="discussion-card card border-0 shadow-sm">
+     <div class="card-body p-4">
             <!-- TODO: Add a <h2> "Discussion". -->
-     <h2>Discussion</h2>
+          <h2 class="h4 fw-bold mb-4">Discussion</h2>
             <!-- Subsection 2.1: Existing Comments -->
             <!-- TODO: Add a <div id="comment-list">.
                  details.js will inject one <article> per comment here.
@@ -76,30 +83,31 @@
                  Comments come from the comments_week table
                  (columns: id, week_id, author, text, created_at).
                  Leave the div empty here. -->
-     <div id="comment-list"></div>
+          <div id="comment-list" class="mb-4"></div>
             <!-- Subsection 2.2: Add a Comment Form -->
             <!-- TODO: Create a <form id="comment-form"> (action="#").
                  The id is required by details.js. -->
-     <form id="comment-form" action="#">
+          <form id="comment-form" action="#">
                 <!-- TODO: Use a <fieldset> to group the controls. -->
                     <!-- TODO: Add a <legend>, e.g., "Leave a Comment". -->
-          <fieldset>                  
-               <legend>Leave a Comment</legend>
+               <fieldset>                  
+                    <legend class="h5 fw-bold mb-3">Leave a Comment</legend>
                     <!-- TODO: Add a <label> and <textarea> for the comment.
                          - label for="new-comment"
                          - textarea id="new-comment", required
                          - The id must be exactly "new-comment" as
                            details.js reads this element by that id. -->
-               <label for="new-comment">comment</label>
-               <textarea id="new-comment" required></textarea>
+                    <label for="new-comment" class="form-label">comment</label>
+                    <textarea id="new-comment" class="form-control mb-3" rows="4" required></textarea>
                     <!-- TODO: Add a submit <button>.
                          - type="submit"
                          - Text: "Post Comment" -->
-               <button type="submit">Post Comment</button>                         
+                    <button type="submit" class="btn custom-btn">Post Comment</button>                         
                 <!-- End of <fieldset> -->
-          </fieldset>                 
+               </fieldset>                 
             <!-- End of <form> -->
-     </form>
+          </form>
+     </div>
         <!-- End of <section#discussion-forum> -->
 </section>
     <!-- End of <main> -->

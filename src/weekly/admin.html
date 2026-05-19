@@ -17,63 +17,68 @@
     <!-- TODO: Add a <title>, e.g., "Manage Weekly Breakdown". -->
      <title>Manage Weekly Breakdown</title>
     <!-- TODO: Link to your CSS framework or stylesheet. -->
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
      <link rel="stylesheet" href="style.css">
     <!-- Required: link admin.js with defer. -->
     <script src="admin.js" defer></script>
 </head>
-<body>
+<body class= "admin-page">
 
     <!-- TODO: Create a <header> containing an <h1>
          "Manage Weekly Breakdown". -->
-         <header>
-          <h1>Manage Weekly Breakdown</h1>
+         <header class="page-header text-white py-4 shadow-sm">
+           <div class="container text-center">
+             <h1 class="fw-bold">Manage Weekly Breakdown</h1>
+             <p class="mb-0">Create, edit, and manage weekly course content</p>
+           </div>
          </header>
     <!-- TODO: Create the <main> content area. -->
-     <main>
+     <main class= "container my-5">
         <!-- ============================================================
              Section 1: Add / Edit Week Form
              ============================================================ -->
         <!-- TODO: Create a <section> for the form. -->
-          <section>
+          <section class="admin-form-section card border-0 shadow-sm mb-5">
+            <div class="card-body p-4">
             <!-- TODO: Add a sub-heading <h2> "Add a New Week". -->
                <h2>Add a New Week</h2>
             <!-- TODO: Create a <form id="week-form"> (action can be "#").
                  The id is required by admin.js. -->
                  <form id="week-form" action="#">
                 <!-- TODO: Use a <fieldset> to group the form controls. -->
-                  <fieldset>  
+                  <fieldset class="admin-fieldset">  
                     <!-- TODO: Add a <legend>, e.g., "Weekly Details". -->
                     <legend>Weekly Details</legend>
                     <!-- TODO: Add a <label> and <input> for the week title.
                          - label for="week-title"
                          - input id="week-title", type="text", required
                          - Placeholder: "Week 1: Introduction to HTML" -->
-                         <label for="week-title">week title</label>
+                         <label for="week-title">Week Title</label>
                          <input 
                          id="week-title"  
                          type="text" 
                          required
-                         Placeholder>Week 1: Introduction to HTML
+                         Placeholder="Week 1: Introduction to HTML"
                          >
                          
                     <!-- TODO: Add a <label> and <input> for the start date.
                          - label for="week-start-date"
                          - input id="week-start-date", type="date", required
                          - Maps to the start_date column in the weeks table. -->
-                         <label for="week-start-date">start date</label>
+                         <label for="week-start-date">Start Date</label>
                          <input 
                          id="week-start-date" 
                          type="date" 
                          required
                          >
-                         .......
+                         
                     <!-- TODO: Add a <label> and <textarea> for the week
                          description.
                          - label for="week-description"
                          - textarea id="week-description", rows="5"
                          - Maps to the description column in the weeks table. -->
-                         <label for="week-description">week
-                         description</label>
+                         <label for="week-description">Week
+                         Description</label>
                          <textarea id="week-description" rows="5"></textarea>
                          
                     <!-- TODO: Add a <label> and <textarea> for resource links
@@ -83,7 +88,7 @@
                          - Maps to the links column (JSON array) in the
                            weeks table. admin.js will split the textarea
                            value on newlines and send it as an array. -->
-                         <label for="week-links">resource links</label> 
+                         <label for="week-links">Resource Links</label> 
                          <textarea id="week-links" rows="3"></textarea> 
                          
                     <!-- TODO: Add a submit <button>.
@@ -92,12 +97,13 @@
                          - When the form is in edit mode, admin.js will
                            change the button text to "Update Week" and
                            store the id being edited in a data attribute. -->
-                         <button id="add-week" type="submit">Add Week</button>
+                         <button id="add-week" type="submit" class="main-btn">Add Week</button>
                 <!-- End of <fieldset> -->
                  </fieldset> 
             <!-- End of <form> -->
                 </form>
         <!-- End of form <section> -->
+            </div>
         </section>
 
 
@@ -105,11 +111,12 @@
              Section 2: Existing Weekly Entries
              ============================================================ -->
         <!-- TODO: Create a <section> to display the current list of weeks. -->
-          <section>
+          <section class="admin-table-section card border-0 shadow-sm">
+              <div class="table-responsive"> 
             <!-- TODO: Add a sub-heading <h2> "Current Weekly Breakdown". -->
-               <h2>Current Weekly Breakdown</h2>
+                <h2>Current Weekly Breakdown</h2>
             <!-- TODO: Create a <table id="weeks-table">. -->
-               <table id="weeks-table">
+                <table id="weeks-table" class="table admin-table">
                 <!-- TODO: Create a <thead> with a <tr> containing <th>
                      elements:
                      - "Week Title"
@@ -148,8 +155,10 @@
                 weeks table (primary key). -->
 
             <!-- End of <table> -->
-            </table>
+                </table>
         <!-- End of list <section> -->
+
+              </div>
         </section>
 
     <!-- End of <main> -->

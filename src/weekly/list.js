@@ -42,26 +42,39 @@ const weekListSection = document.getElementById('week-list-section');
  * the weeks table) so that details.js can read the id from the URL.
  */
 function createWeekArticle(week) {
-  // ... your implementation here ...
-  const article= document.createElement("article");
+  const article = document.createElement("article");
+  article.className = "col-md-8  ";
 
-  const title= document.createElement("h2");
-  title.textContent= week.title;
+  const card = document.createElement("div");
+  card.className = "card week-card h-100 shadow-sm border-0";
 
-  const start_date= document.createElement("p");
-  start_date.textContent= "Starts on: " + week.start_date;
+  const cardBody = document.createElement("div");
+  cardBody.className = "card-body d-flex flex-column";
 
-  const description= document.createElement("p");
-  description.textContent= week.description;
+  const title = document.createElement("h2");
+  title.className = "card-title h4 fw-bold";
+  title.textContent = week.title;
 
-  const link= document.createElement("a");
-  link.href= `details.html?id=${week.id}`;
-  link.textContent="View Details & Discussion";
+  const startDate = document.createElement("p");
+  startDate.className = "text-muted small mb-2";
+  startDate.textContent = "Starts on: " + week.start_date;
 
-  article.appendChild(title);
-  article.appendChild(start_date);
-  article.appendChild(description);
-  article.appendChild(link);
+  const description = document.createElement("p");
+  description.className = "card-text";
+  description.textContent = week.description;
+
+  const link = document.createElement("a");
+  link.href = `details.html?id=${week.id}`;
+  link.className = "btn mt-auto custom-btn";
+  link.textContent = "View Details & Discussion";
+
+  cardBody.appendChild(title);
+  cardBody.appendChild(startDate);
+  cardBody.appendChild(description);
+  cardBody.appendChild(link);
+
+  card.appendChild(cardBody);
+  article.appendChild(card);
 
   return article;
 }
@@ -85,6 +98,11 @@ async function loadWeeks() {
   const result= await response.json();
   
   weekListSection.innerHTML="";
+
+  if (!result.success || !Array.isArray(result.data)) {
+    weekListSection.innerHTML = '<p class="text-danger">Unable to load weeks.</p>';
+    return;
+  }
 
   for(const week of result.data){
     const article= createWeekArticle(week);
