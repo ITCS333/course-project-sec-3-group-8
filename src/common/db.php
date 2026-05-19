@@ -13,15 +13,23 @@ if (!function_exists('getDBConnection')) {
         static $pdo = null;
 
         if ($pdo === null) {
-            $host = 'localhost';
-            $db   = 'course';
-            $user = 'admin';
-            $pass = 'password123';
 
-            $dsn = "mysql:host={$host};dbname={$db};charset=utf8mb4";
+            if (defined('PHPUNIT_COMPOSER_INSTALL')) {
+                // ✅ PHPUnit → SQLite
+                $pdo = new PDO('sqlite::memory:');
+            } else {
+               
+                $host = 'localhost';
+                $db   = 'course';
+                $user = 'admin';
+                $pass = 'password123';
 
-            $pdo = new PDO($dsn, $user, $pass);
-            $pdo->setAttribute(PDO::ATTR_ERRMODE,           PDO::ERRMODE_EXCEPTION);
+                $dsn = "mysql:host={$host};dbname={$db};charset=utf8mb4";
+                $pdo = new PDO($dsn, $user, $pass);
+            }
+
+            
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
         }
 
