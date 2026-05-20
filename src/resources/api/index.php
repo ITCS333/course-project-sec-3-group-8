@@ -90,8 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 // The Database class lives at src/resources/api/config/Database.php
 // require_once './config/Database.php';
 
-require_once __DIR__ . '/config/Database.php';
-// TODO: Get the PDO database connection
+require_once __DIR__ . '/../../common/db.php';// TODO: Get the PDO database connection
 // $database = new Database();
 // $db = $database->getConnection();
 
