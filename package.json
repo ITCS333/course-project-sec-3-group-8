@@ -2,6 +2,7 @@
   "name": "autograder",
   "version": "1.0.0",
   "scripts": {
+    "start": "npx serve .",
     "test": "jest"
   },
   "devDependencies": {
