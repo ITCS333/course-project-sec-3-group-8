@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "start": "npx serve .",
+    "build": "echo Build complete",
     "test": "jest"
   },
   "devDependencies": {
