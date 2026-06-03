@@ -13,7 +13,7 @@ The website covers five functional areas, each assigned to one team member.
 
 ## Live Demo
 
-> **Replit Deployment:**https://replit.com/@zalaryyedh/course-project-sec-3-group-8
+> **Replit Deployment:**https://course-project-sec-3-group-8-2--asmae201e.replit.app
 
 
 
